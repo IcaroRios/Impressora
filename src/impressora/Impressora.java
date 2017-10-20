@@ -43,9 +43,9 @@ public class Impressora {
         Doc doc = new SimpleDoc(in, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
         PrintService service = PrintServiceLookup.lookupDefaultPrintService();
 
-        try {
+        try {            
             
-            service.createPrintJob().print(doc, null);
+            service.createPrintJob().print(doc, null);            
         }catch (PrintException e) {
             e.printStackTrace();
         }

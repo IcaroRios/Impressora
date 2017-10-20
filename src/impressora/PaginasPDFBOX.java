@@ -5,49 +5,49 @@
  */
 package impressora;
 
+import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.IOException;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.printing.PDFPageable;
-import org.apache.pdfbox.text.PDFTextStripper;
-
+import java.io.FileOutputStream;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 public class PaginasPDFBOX {
     public static void main(String[] args) {
         
         
         try {
-            String caminho = "arquivos" + File.separator;           
-            PDDocument document = PDDocument.load(new File(caminho+"C_PIC.pdf"));
-            System.out.println(document.getNumberOfPages()); // printou a quantidade de páginas.
-            
-            PrintService myPrintService = findPrintService("My Windows printer Name");
-            
+            String caminho = "arquivos" + File.separator;  
+            URL website = new URL("http://localhost:8000/down");
+            ReadableByteChannel rbc = Channels.newChannel(website.openStream());        
+            FileOutputStream fos = new FileOutputStream(caminho+"Teste.pdf");
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.close();
+                                 
+            PDDocument document = PDDocument.load(new File(caminho+"Teste.pdf"));
+            System.out.println(document.getNumberOfPages()); // printou a quantidade de páginas.            
+            PrintService myPrintService = findPrintService("EPSON L355 Series");            
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setPageable(new PDFPageable(document));
             job.setPrintService(myPrintService);
             job.print();
             
-        } catch (Exception e){
+        } catch (IOException | NullPointerException | PrinterException e){
             e.printStackTrace();
-        }     
+        }
         
-    }
-    
+    }    
         private static PrintService findPrintService(String printerName) {
         PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
         for (PrintService printService : printServices) {
-            System.out.println(printService);
+            System.out.println(printService.getName());
             if (printService.getName().trim().equals(printerName)) {
+                System.out.println(printService.getName());
                 return printService;
             }
         }
