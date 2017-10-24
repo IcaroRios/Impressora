@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
+
 /**
  *
  * @author Neida
@@ -28,16 +29,22 @@ public class Requisicao {
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         fos.close();
     */
+        /*
         URL website = new URL("http://localhost:8000/print/userid");
         
         BufferedReader in = new BufferedReader(
         new InputStreamReader(website.openStream()));
-
+        
         int inputLine =  Integer.valueOf(in.readLine()) ;
         System.out.println(inputLine);
 
         in.close();
-
+                */
+                File arq = new File("C:\\NOOBS.zip");
+                System.out.println(arq.getAbsolutePath());
+                arq = new File(arq.getAbsolutePath());               
+                System.out.println(arq.exists());                
+                System.out.println(arq.delete());
     }
     
 }
